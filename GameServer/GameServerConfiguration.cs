@@ -175,7 +175,7 @@ namespace DOL.GS
                     m_serverType = EGameServerType.GST_Test;
                     break;
                 default:
-                    m_serverType = EGameServerType.GST_Normal;
+                    m_serverType = EGameServerType.GST_PvP;
                     break;
             }
 
@@ -282,7 +282,7 @@ namespace DOL.GS
 			root["Server"]["EnableCompilation"].Set(m_enableCompilation);
 			root["Server"]["AutoAccountCreation"].Set(m_autoAccountCreation);
 
-			string serverType = "Normal";
+			string serverType = "PvP";
 
 			switch (m_serverType)
 			{
@@ -305,7 +305,7 @@ namespace DOL.GS
 					serverType = "Test";
 					break;
 				default:
-					serverType = "Normal";
+					serverType = "PvP";
 					break;
 			}
 			root["Server"]["GameType"].Set(serverType);

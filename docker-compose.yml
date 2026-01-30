@@ -24,7 +24,9 @@ services:
       - opendaoc-network
 
   gameserver:
-    image: ghcr.io/opendaoc/opendaoc-core:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: opendaoc-server
     stdin_open: true
     tty: true
@@ -46,7 +48,7 @@ services:
       DETECT_REGION_IP: "True"
       ENABLE_COMPILATION: "True"
       ENABLE_UPNP: "False"
-      GAME_TYPE: "Normal"
+      GAME_TYPE: "PvP"
       GM_ACTION_LOGGER_NAME: "gmactions"
       INVALID_NAMES_FILE: "./config/invalidnames.txt"
       LOG_CONFIG_FILE: "./config/logconfig.xml"

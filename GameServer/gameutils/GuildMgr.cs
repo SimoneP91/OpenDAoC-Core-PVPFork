@@ -425,6 +425,21 @@ namespace DOL.GS
 
         private static void AddGuild(Guild guild)
         {
+            // Check if guild already exists to avoid duplicate key exception
+            if (_nameToGuilds.ContainsKey(guild.Name))
+            {
+                if (log.IsWarnEnabled)
+                    log.Warn($"Guild '{guild.Name}' already exists in _nameToGuilds, skipping add.");
+                return;
+            }
+
+            if (_idToGuild.ContainsKey(guild.GuildID))
+            {
+                if (log.IsWarnEnabled)
+                    log.Warn($"Guild with ID '{guild.GuildID}' already exists in _idToGuild, skipping add.");
+                return;
+            }
+
             _nameToGuilds.Add(guild.Name, guild);
             _idToGuild.Add(guild.GuildID, guild);
             guild.ID = ++_lastID;

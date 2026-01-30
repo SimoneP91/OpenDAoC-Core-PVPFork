@@ -33,7 +33,7 @@ namespace DOL.GS.GameEvents
 		/// <summary>
 		/// Should the server start characters as Base Class?
 		/// </summary>
-		[ServerProperty("startup", "start_as_base_class", "Should we start all players as their base class? true if yes (e.g. Armsmen become Fighters on Creation)", true)]
+		[ServerProperty("startup", "start_as_base_class", "Should we start all players as their base class? true if yes (e.g. Armsmen become Fighters on Creation)", false)]
 		public static bool START_AS_BASE_CLASS;
 
 		/// <summary>
@@ -45,7 +45,8 @@ namespace DOL.GS.GameEvents
 		[GameServerStartedEvent]
 		public static void OnScriptLoaded(DOLEvent e, object sender, EventArgs args)
 		{
-			GameEventMgr.AddHandler(DatabaseEvent.CharacterCreated, new DOLEventHandler(OnCharacterCreation));
+			// DISABLED: Characters should start with their specialized class, not base class
+			// GameEventMgr.AddHandler(DatabaseEvent.CharacterCreated, new DOLEventHandler(OnCharacterCreation));
 		}
 		
 		/// <summary>
@@ -69,22 +70,22 @@ namespace DOL.GS.GameEvents
 		public static void OnCharacterCreation(DOLEvent e, object sender, EventArgs args)
 		{
 			// Only act if enabled.
-			if (!START_AS_BASE_CLASS)
-				return;
+			if (START_AS_BASE_CLASS)
+			{
+				// Check Args
+				var chArgs = args as CharacterEventArgs;
 			
-			// Check Args
-			var chArgs = args as CharacterEventArgs;
+				if (chArgs == null)
+					return;
 			
-			if (chArgs == null)
-				return;
-			
-			DbCoreCharacter ch = chArgs.Character;
+				DbCoreCharacter ch = chArgs.Character;
 
-			// Revert to Base Class.
-			var chClass = ScriptMgr.FindCharacterBaseClass(ch.Class);
+				// Revert to Base Class.
+				var chClass = ScriptMgr.FindCharacterBaseClass(ch.Class);
 			
-			if (chClass != null && chClass.ID != ch.Class)
-				ch.Class = chClass.ID;
+				if (chClass != null && chClass.ID != ch.Class)
+					ch.Class = chClass.ID;
+			}
 		}
 		
 	}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <Server>
+        <Port></Port>
+        <IP></IP>
+        <RegionIP></RegionIP>
+        <RegionPort></RegionPort>
+        <UdpIP></UdpIP>
+        <UdpPort></UdpPort>
+        <EnableUPnP></EnableUPnP>
+        <DetectRegionIP></DetectRegionIP>
+        <ServerName>OpenDAoC</ServerName>
+        <ServerNameShort>OPENDAOC</ServerNameShort>
+        <LogConfigFile></LogConfigFile>
+        <ScriptCompilationTarget></ScriptCompilationTarget>
+        <ScriptAssemblies></ScriptAssemblies>
+        <EnableCompilation></EnableCompilation>
+        <AutoAccountCreation></AutoAccountCreation>
+        <GameType>PvP</GameType>
+				<ServerRules>PvPServerRules</ServerRules>
+        <CheatLoggerName></CheatLoggerName>
+        <GMActionLoggerName></GMActionLoggerName>
+        <InvalidNamesFile></InvalidNamesFile>
+        <DBType>MYSQL</DBType>
+        <DBConnectionString>server=db;port=3306;database=opendaoc;userid=root;password=troiett4;treattinyasboolean=true</DBConnectionString>
+        <DBAutosave></DBAutosave>
+        <DBAutosaveInterval></DBAutosaveInterval>
+        <CpuUse></CpuUse>
+    </Server>
+</root>
