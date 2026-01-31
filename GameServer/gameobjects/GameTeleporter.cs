@@ -90,6 +90,43 @@ namespace DOL.GS
 
 		protected virtual bool GetTeleportLocation(GamePlayer player, string text)
 		{
+			// In PvP servers, allow cross-realm teleports to capitals
+			if (GameServer.ServerRules is DOL.GS.ServerRules.PvPServerRules)
+			{
+				string textLower = text.ToLower();
+				
+				// Albion capital
+				if (textLower == "camelot")
+				{
+					DbTeleport teleport = WorldMgr.GetTeleportLocation(eRealm.Albion, ":Camelot");
+					if (teleport != null)
+					{
+						OnDestinationPicked(player, teleport);
+						return true;
+					}
+				}
+				// Midgard capital
+				else if (textLower == "jordheim")
+				{
+					DbTeleport teleport = WorldMgr.GetTeleportLocation(eRealm.Midgard, ":Jordheim");
+					if (teleport != null)
+					{
+						OnDestinationPicked(player, teleport);
+						return true;
+					}
+				}
+				// Hibernia capital
+				else if (textLower == "tir na nog")
+				{
+					DbTeleport teleport = WorldMgr.GetTeleportLocation(eRealm.Hibernia, ":Tir na Nog");
+					if (teleport != null)
+					{
+						OnDestinationPicked(player, teleport);
+						return true;
+					}
+				}
+			}
+			
 			// Battlegrounds are specials, as the teleport location depends on
 			// the level of the player, so let's deal with that first.
 			if (text.ToLower() == "battlegrounds")

@@ -160,11 +160,18 @@ namespace DOL.GS.ServerRules
 			GamePlayer playerDefender = defender as GamePlayer;
 			if (playerAttacker != null && playerDefender != null)
 			{
-				// In PvP server (Mordred-style), only group members are protected
-				// Guild and BattleGroup do NOT prevent PvP
+				// In PvP server (Mordred-style), group members and guild members are protected
+				// BattleGroup does NOT prevent PvP
 				if (playerAttacker.Group != null && playerAttacker.Group.IsInTheGroup(playerDefender))
 				{
 					if (!quiet) MessageToLiving(playerAttacker, "You can't attack your group members.");
+					return false;
+				}
+				
+				// Protect guild members
+				if (playerAttacker.Guild != null && playerAttacker.Guild == playerDefender.Guild)
+				{
+					if (!quiet) MessageToLiving(playerAttacker, "You can't attack your guild members.");
 					return false;
 				}
 
@@ -212,13 +219,6 @@ namespace DOL.GS.ServerRules
 				}
 			}
 
-			// In PvP server, allow all realm 0 NPCs (monsters) to attack players
-			// Skip FactionMgr check to ensure monsters are always aggressive
-			if (attacker.Realm == 0 && defender is GamePlayer)
-			{
-				return true; // Monsters can always attack players in PvP server
-			}
-
 			if (attacker.Realm == 0 && defender.Realm == 0)
 			{
 				return FactionMgr.CanLivingAttack(attacker, defender);
@@ -228,19 +228,14 @@ namespace DOL.GS.ServerRules
 			if (attacker is GameNPC && (attacker as GameNPC).IsConfused && attacker.Realm == defender.Realm)
 				return true;
 
-			// In PvP server, only prevent attacking friendly Keep Guards and Fonts
-			// Regular NPCs (monsters) should be able to attack and be attacked
-			if (defender is GameKeepGuard || defender is GameFont)
+			// "friendly" NPCs can't attack "friendly" players
+			if (defender is GameNPC && defender.Realm != 0 && attacker.Realm != 0 && defender is GameKeepGuard == false && defender is GameFont == false)
 			{
-				if (defender.Realm != 0 && attacker.Realm == defender.Realm)
-				{
-					if (quiet == false) MessageToLiving(attacker, "You can't attack a friendly NPC!");
-					return false;
-				}
+				if (quiet == false) MessageToLiving(attacker, "You can't attack a friendly NPC!");
+				return false;
 			}
-			
-			// Keep Guards can't attack same realm players
-			if (attacker is GameKeepGuard && attacker.Realm != 0 && defender.Realm == attacker.Realm)
+			// "friendly" NPCs can't be attacked by "friendly" players
+			if (attacker is GameNPC && attacker.Realm != 0 && defender.Realm != 0 && attacker is GameKeepGuard == false)
 			{
 				return false;
 			}

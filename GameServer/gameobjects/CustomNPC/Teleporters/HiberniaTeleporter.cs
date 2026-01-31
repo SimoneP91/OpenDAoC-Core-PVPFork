@@ -39,14 +39,22 @@ namespace DOL.GS
 			if (!base.Interact(player))
 				return false;
 
-			SayTo(player, "Greetings, " + player.Name +
+			string message = "Greetings, " + player.Name +
 			              " I am able to channel energy to transport you to distant lands. I can send you to the following locations:\n\n" +
 			              "[Druim Ligen] in Connacht or \n[Druim Cain] in Bri Leith\n" +
 			              "[Shannon Estuary] watchtower\n" +
 			              "[Domnann] Grove in the [Shrouded Isles]\n" +
 			              "[Tir na Nog] our glorious capital\n" +
 			              "[Entrance] to the areas of [housing]\n\n" +
-			              "Or one of the many [towns] throughout Hibernia");
+			              "Or one of the many [towns] throughout Hibernia";
+		
+			// In PvP servers, allow cross-realm travel
+			if (GameServer.ServerRules is DOL.GS.ServerRules.PvPServerRules)
+			{
+				message += "\n\nI can also send you to other realms:\n[Camelot] (Albion)\n[Jordheim] (Midgard)";
+			}
+		
+			SayTo(player, message);
 			return true;
 		}
 
@@ -88,6 +96,37 @@ namespace DOL.GS
 				}
 			}
 			base.OnSubSelectionPicked(player, subSelection);
+		}
+
+		/// <summary>
+		/// Override to allow cross-realm teleports in PvP servers
+		/// </summary>
+		protected override bool GetTeleportLocation(GamePlayer player, string text)
+		{
+			// In PvP servers, allow teleport to other realm capitals
+			if (GameServer.ServerRules is DOL.GS.ServerRules.PvPServerRules)
+			{
+				if (text.ToLower() == "camelot")
+				{
+					DbTeleport teleport = WorldMgr.GetTeleportLocation(eRealm.Albion, ":Camelot");
+					if (teleport != null)
+					{
+						OnDestinationPicked(player, teleport);
+						return true;
+					}
+				}
+				else if (text.ToLower() == "jordheim")
+				{
+					DbTeleport teleport = WorldMgr.GetTeleportLocation(eRealm.Midgard, ":Jordheim");
+					if (teleport != null)
+					{
+						OnDestinationPicked(player, teleport);
+						return true;
+					}
+				}
+			}
+		
+			return base.GetTeleportLocation(player, text);
 		}
 
 		/// <summary>

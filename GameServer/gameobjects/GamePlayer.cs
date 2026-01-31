@@ -5774,9 +5774,9 @@ namespace DOL.GS
 
         public override void AddXPGainer(GameLiving xpGainer, double damageAmount)
         {
-            // In case a player is attacked by a player of the same realm (e.g. in a duel, due to a confusion spell, a bug, etc.).
-            // This also means the amount of damage dealt by the xp gainer won't be taken into account when awarding XP, RPs, BPs.
-            if (xpGainer.Realm == Realm)
+            // In PvP servers (Mordred-style), same-realm PvP is allowed and should award RPs/BPs
+            // In other server types, block same-realm damage from being tracked (e.g. duels, confusion spells)
+            if (GameServer.ServerRules is not ServerRules.PvPServerRules && xpGainer.Realm == Realm)
                 return;
 
             base.AddXPGainer(xpGainer, damageAmount);
