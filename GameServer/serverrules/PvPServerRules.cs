@@ -224,37 +224,54 @@ namespace DOL.GS.ServerRules
 				return FactionMgr.CanLivingAttack(attacker, defender);
 			}
 
-			//allow confused mobs to attack same realm
-			if (attacker is GameNPC && (attacker as GameNPC).IsConfused && attacker.Realm == defender.Realm)
-				return true;
+    //allow confused mobs to attack same realm
+    if (attacker is GameNPC && (attacker as GameNPC).IsConfused && attacker.Realm == defender.Realm)
+        return true;
 
-			// NPCs in safe regions (cities) are always friendly to all players
-			if (defender is GameNPC && m_safeRegions != null)
-			{
-				foreach (int reg in m_safeRegions)
-				{
-					if (defender.CurrentRegionID == reg)
-					{
-						if (quiet == false) MessageToLiving(attacker, "You can't attack NPCs in cities!");
-						return false;
-					}
-				}
-			}
-			if (attacker is GameNPC && m_safeRegions != null)
-			{
-				foreach (int reg in m_safeRegions)
-				{
-					if (attacker.CurrentRegionID == reg)
-						return false;
-				}
-			}
+    // NPCs (except Keep Guards) in safe regions (cities) are always friendly to all players
+    if (defender is GameNPC && !(defender is GameKeepGuard) && m_safeRegions != null)
+    {
+        foreach (int reg in m_safeRegions)
+        {
+            if (defender.CurrentRegionID == reg)
+            {
+                if (quiet == false) MessageToLiving(attacker, "You can't attack NPCs in cities!");
+                return false;
+            }
+        }
+    }
+    // NPCs (except Keep Guards) in safe regions cannot attack players
+    // This allows players to visit enemy cities in PvP servers without being attacked
+    if (attacker is GameNPC && !(attacker is GameKeepGuard) && defender is GamePlayer && m_safeRegions != null)
+    {
+        foreach (int reg in m_safeRegions)
+        {
+            if (attacker.CurrentRegionID == reg)
+                return false;
+        }
+    }
 
-			// "friendly" NPCs can't attack "friendly" players (same realm)
-			if (defender is GameNPC && defender.Realm != 0 && attacker.Realm != 0 && defender.Realm == attacker.Realm && defender is GameKeepGuard == false && defender is GameFont == false)
-			{
-				if (quiet == false) MessageToLiving(attacker, "You can't attack a friendly NPC!");
-				return false;
-			}
+    // City Guards (except Keep Guards) are always friendly to all players
+    // This prevents city guards from attacking players of different realms
+    if (attacker is GameGuard && !(attacker is GameKeepGuard) && defender is GamePlayer)
+    {
+        return false;
+    }
+
+    // Players cannot attack City Guards (except Keep Guards in frontiers)
+    if (defender is GameGuard && !(defender is GameKeepGuard) && attacker is GamePlayer)
+    {
+        if (quiet == false) MessageToLiving(attacker, "You can't attack city guards!");
+        return false;
+    }
+
+    // Players cannot attack Merchants
+    if (defender is GameMerchant && attacker is GamePlayer)
+    {
+        if (quiet == false) MessageToLiving(attacker, "You can't attack merchants!");
+        return false;
+    }
+
 			// "friendly" NPCs can't be attacked by "friendly" players (same realm)
 			if (attacker is GameNPC && attacker.Realm != 0 && defender.Realm != 0 && attacker.Realm == defender.Realm && attacker is GameKeepGuard == false)
 			{

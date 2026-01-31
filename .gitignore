@@ -183,7 +183,6 @@ DocProject/Help/Html2
 DocProject/Help/html
 # Click-Once directory
 publish/
-docs/
 
 # Publish Web Output
 *.[Pp]ublish.xml
@@ -485,3 +484,8 @@ $RECYCLE.BIN/
 
 # OpenDAoC
 /Pathing/Detour/Build
+
+# Custom folders to ignore
+docs/
+release/
+debug/
