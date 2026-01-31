@@ -1,5 +1,6 @@
 # OpenDAoC - Documentazione Completa
 
+# secret pUcFmpBdQe4r
 Benvenuto nella documentazione completa di **OpenDAoC**, un emulatore open-source per Dark Age of Camelot (DAoC).
 
 ## 📚 Indice della Documentazione
