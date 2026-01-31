@@ -11,7 +11,7 @@ using DOL.Language;
 
 namespace DOL.GS
 {
-    public class BuffBot : GameMerchant
+    public class BuffBot : GameNPC
     {
         #region BuffBot attrib/spells/casting
         public BuffBot() : base()
