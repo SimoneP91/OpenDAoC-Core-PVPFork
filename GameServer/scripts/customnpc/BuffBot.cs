@@ -16,17 +16,6 @@ namespace DOL.GS
         #region BuffBot attrib/spells/casting
         public BuffBot() : base()
         {
-            Flags |= GameNPC.eFlags.PEACE;
-        }
-
-        public override int Concentration
-        {
-            get { return 10000; }
-        }
-
-        public override int Mana
-        {
-            get { return 10000; }
         }
 
         private Queue m_buffs = new Queue();
@@ -36,6 +25,9 @@ namespace DOL.GS
         public override bool AddToWorld()
         {
             Level = 50;
+            Flags |= GameNPC.eFlags.PEACE;
+            MaxSpeedBase = 0;
+            Mana = 10000;
             return base.AddToWorld();
         }
 
@@ -756,26 +748,6 @@ namespace DOL.GS
             player.Out.SendMessage("The green light of " + realmName + " refreshes your enhancements. Fight well!", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
 
             return true;
-        }
-
-        public override bool WhisperReceive(GameLiving source, string str)
-        {
-            return false;
-        }
-
-        public override void OnPlayerBuy(GamePlayer player, int item_slot, int number)
-        {
-            return;
-        }
-
-        public override bool ReceiveItem(GameLiving source, DbInventoryItem item)
-        {
-            GamePlayer t = source as GamePlayer;
-            if (t != null && item != null)
-            {
-                t.Out.SendMessage(GetName(0, false) + " no longer accepts buff tokens. I can grant you the buffs directly when you speak to me.", eChatType.CT_Say, eChatLoc.CL_PopupWindow);
-            }
-            return false;
         }
     }
 }
