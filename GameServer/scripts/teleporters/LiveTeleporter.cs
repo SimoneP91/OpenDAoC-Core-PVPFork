@@ -116,7 +116,10 @@ namespace DOL.GS.Scripts
                               "[Gothwaite Harbor] in the [Shrouded Isles],\n" +
                               "[Camelot] our glorious capital,\n" +
                               "[Entrance] to the areas of [Housing]\n\n" +
-                              "or one of the many [towns] throughout Albion.";
+                              "or one of the many [towns] throughout Albion.\n\n" +
+                              "I can also send you to other realms:\n" +
+                              "[Jordheim] (Midgard)\n" +
+                              "[Tir na Nog] (Hibernia)";
                               //"For this event duration, I can send you to [Darkness Falls]";
                     break;
 
@@ -129,7 +132,10 @@ namespace DOL.GS.Scripts
                               "[Aegirhamn] in the [Shrouded Isles],\n" +
                               "Our glorious city of [Jordheim],\n" +
                               "[Entrance] to the areas of [Housing]\n\n" +
-                              "or one of the many [towns] throughout Midgard.";
+                              "or one of the many [towns] throughout Midgard.\n\n" +
+                              "I can also send you to other realms:\n" +
+                              "[Camelot] (Albion)\n" +
+                              "[Tir na Nog] (Hibernia)";
                     break;
 
                 case eRealm.Hibernia:
@@ -141,7 +147,10 @@ namespace DOL.GS.Scripts
                               "[Domnann] Grove in the [Shrouded Isles],\n" +
                               "[Tir na Nog] our glorious capital,\n" +
                               "[Entrance] to the areas of [Housing]\n\n" +
-                              "or one of the many [towns] throughout Hibernia.";
+                              "or one of the many [towns] throughout Hibernia.\n\n" +
+                              "I can also send you to other realms:\n" +
+                              "[Camelot] (Albion)\n" +
+                              "[Jordheim] (Midgard)";
                     break;
 
                 default:
@@ -289,6 +298,35 @@ namespace DOL.GS.Scripts
                     }
 
                     break;
+            }
+
+            // Handle cross-realm teleports
+            if (text.ToLower() == "jordheim")
+            {
+                DbTeleport teleport = WorldMgr.GetTeleportLocation(eRealm.Midgard, ":Jordheim");
+                if (teleport != null)
+                {
+                    OnDestinationPicked(player, teleport);
+                    return true;
+                }
+            }
+            else if (text.ToLower() == "tir na nog")
+            {
+                DbTeleport teleport = WorldMgr.GetTeleportLocation(eRealm.Hibernia, ":Tir na Nog");
+                if (teleport != null)
+                {
+                    OnDestinationPicked(player, teleport);
+                    return true;
+                }
+            }
+            else if (text.ToLower() == "camelot" && Realm != eRealm.Albion)
+            {
+                DbTeleport teleport = WorldMgr.GetTeleportLocation(eRealm.Albion, ":Camelot");
+                if (teleport != null)
+                {
+                    OnDestinationPicked(player, teleport);
+                    return true;
+                }
             }
 
             // Another special case is personal house, as there is no location

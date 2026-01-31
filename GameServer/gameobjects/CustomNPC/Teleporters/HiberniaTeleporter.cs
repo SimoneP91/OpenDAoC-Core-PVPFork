@@ -46,13 +46,10 @@ namespace DOL.GS
 			              "[Domnann] Grove in the [Shrouded Isles]\n" +
 			              "[Tir na Nog] our glorious capital\n" +
 			              "[Entrance] to the areas of [housing]\n\n" +
-			              "Or one of the many [towns] throughout Hibernia";
-		
-			// In PvP servers, allow cross-realm travel
-			if (GameServer.ServerRules is DOL.GS.ServerRules.PvPServerRules)
-			{
-				message += "\n\nI can also send you to other realms:\n[Camelot] (Albion)\n[Jordheim] (Midgard)";
-			}
+			              "Or one of the many [towns] throughout Hibernia\n\n" +
+			              "I can also send you to other realms:\n" +
+			              "[Camelot] (Albion)\n" +
+			              "[Jordheim] (Midgard)";
 		
 			SayTo(player, message);
 			return true;
@@ -99,33 +96,30 @@ namespace DOL.GS
 		}
 
 		/// <summary>
-		/// Override to allow cross-realm teleports in PvP servers
+		/// Override to allow cross-realm teleports
 		/// </summary>
 		protected override bool GetTeleportLocation(GamePlayer player, string text)
 		{
-			// In PvP servers, allow teleport to other realm capitals
-			if (GameServer.ServerRules is DOL.GS.ServerRules.PvPServerRules)
+			// Allow teleport to other realm capitals
+			if (text.ToLower() == "camelot")
 			{
-				if (text.ToLower() == "camelot")
+				DbTeleport teleport = WorldMgr.GetTeleportLocation(eRealm.Albion, ":Camelot");
+				if (teleport != null)
 				{
-					DbTeleport teleport = WorldMgr.GetTeleportLocation(eRealm.Albion, ":Camelot");
-					if (teleport != null)
-					{
-						OnDestinationPicked(player, teleport);
-						return true;
-					}
-				}
-				else if (text.ToLower() == "jordheim")
-				{
-					DbTeleport teleport = WorldMgr.GetTeleportLocation(eRealm.Midgard, ":Jordheim");
-					if (teleport != null)
-					{
-						OnDestinationPicked(player, teleport);
-						return true;
-					}
+					OnDestinationPicked(player, teleport);
+					return true;
 				}
 			}
-		
+			else if (text.ToLower() == "jordheim")
+			{
+				DbTeleport teleport = WorldMgr.GetTeleportLocation(eRealm.Midgard, ":Jordheim");
+				if (teleport != null)
+				{
+					OnDestinationPicked(player, teleport);
+					return true;
+				}
+			}
+	
 			return base.GetTeleportLocation(player, text);
 		}
 
