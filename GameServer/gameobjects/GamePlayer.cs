@@ -741,7 +741,10 @@ namespace DOL.GS
 
                 // Players can only quit instantaneously if they aren't in combat.
                 // Don't bother starting the timer if we can quit instantaneously.
-                if (_owner.Client.Account.PrivLevel > 1 || (ServerProperties.Properties.DISABLE_QUIT_TIMER && !_owner.Client.Player.InCombat))
+                // Also allow instant quit in capital cities (Camelot, Jordheim, Tir na Nog)
+                if (_owner.Client.Account.PrivLevel > 1 || 
+                    (ServerProperties.Properties.DISABLE_QUIT_TIMER && !_owner.Client.Player.InCombat) ||
+                    _owner.CurrentRegion.IsCapitalCity)
                 {
                     Quit();
                     return;

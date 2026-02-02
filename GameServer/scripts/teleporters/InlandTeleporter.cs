@@ -115,6 +115,8 @@ namespace DOL.GS.Scripts
                               "[Avalon Marsh] wharf,\n" +
                               "[Gothwaite Harbor] in the [Shrouded Isles],\n" +
                               "[Camelot] our glorious capital,\n" +
+                              "[Jordheim] capital of Midgard,\n" +
+                              "[Tir na Nog] capital of Hibernia,\n" +
                               "[Entrance] to the areas of [Housing]\n\n" +
                               "or one of the many [towns] throughout Albion.";
                               //"For this event duration, I can send you to [Darkness Falls]";
@@ -128,6 +130,8 @@ namespace DOL.GS.Scripts
                               "Beaches of [Gotar] near Nailiten,\n" +
                               "[Aegirhamn] in the [Shrouded Isles],\n" +
                               "Our glorious city of [Jordheim],\n" +
+                              "[Camelot] capital of Albion,\n" +
+                              "[Tir na Nog] capital of Hibernia,\n" +
                               "[Entrance] to the areas of [Housing]\n\n" +
                               "or one of the many [towns] throughout Midgard.";
                     break;
@@ -140,6 +144,8 @@ namespace DOL.GS.Scripts
                               "[Shannon Estuary] watchtower,\n" +
                               "[Domnann] Grove in the [Shrouded Isles],\n" +
                               "[Tir na Nog] our glorious capital,\n" +
+                              "[Camelot] capital of Albion,\n" +
+                              "[Jordheim] capital of Midgard,\n" +
                               "[Entrance] to the areas of [Housing]\n\n" +
                               "or one of the many [towns] throughout Hibernia.";
                     break;

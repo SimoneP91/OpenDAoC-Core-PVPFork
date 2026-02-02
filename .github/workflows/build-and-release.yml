@@ -17,7 +17,11 @@ jobs:
         with:
           string: '${{ github.repository }}'
 
-      - name: 📅 Get current date
+      - name: � Get repository name only
+        id: repo_only
+        run: echo "lowercase=$(echo '${{ github.event.repository.name }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+
+      - name: �📅 Get current date
         id: date
         run: echo "date=$(date +'%Y.%m')" >> $GITHUB_OUTPUT
 
@@ -57,19 +61,19 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          tags: '${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.lowercase }}:temp'
+          tags: '${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_only.outputs.lowercase }}:temp'
           push: false
           load: true
 
       - name: 🏷️ Tag image for Docker Hub
         run: |
-          docker tag "${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.lowercase }}:temp" "${{ secrets.DOCKERHUB_USERNAME }}/opendaoc:${{ steps.set_version.outputs.version }}"
-          docker tag "${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.lowercase }}:temp" "${{ secrets.DOCKERHUB_USERNAME }}/opendaoc:latest"
+          docker tag "${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_only.outputs.lowercase }}:temp" "${{ secrets.DOCKERHUB_USERNAME }}/opendaoc:${{ steps.set_version.outputs.version }}"
+          docker tag "${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_only.outputs.lowercase }}:temp" "${{ secrets.DOCKERHUB_USERNAME }}/opendaoc:latest"
 
       - name: 🏷️ Tag image for GitHub Container Registry
         run: |
-          docker tag "${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.lowercase }}:temp" "ghcr.io/${{ steps.repo_name.outputs.lowercase }}:${{ steps.set_version.outputs.version }}"
-          docker tag "${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.lowercase }}:temp" "ghcr.io/${{ steps.repo_name.outputs.lowercase }}:latest"
+          docker tag "${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_only.outputs.lowercase }}:temp" "ghcr.io/${{ steps.repo_name.outputs.lowercase }}:${{ steps.set_version.outputs.version }}"
+          docker tag "${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_only.outputs.lowercase }}:temp" "ghcr.io/${{ steps.repo_name.outputs.lowercase }}:latest"
 
       - name: 🔑 Log in to Docker Hub
         uses: docker/login-action@v3
